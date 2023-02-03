@@ -6,8 +6,7 @@ on:
       - production
 
 env:
-  FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-  FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+  SONIN_KEYS_PASSPHRASE: ${{ secrets.SONIN_KEYS_PASSPHRASE }}
 
 jobs:
   release:
@@ -22,16 +21,17 @@ jobs:
       with:
         java-version: 11
 
-    - name: Decrypt Sonin secrets
-      run: sh ./scripts/decrypt_secret.sh
-      env:
-        SONIN_KEYS_PASSPHRASE: ${{secrets.SONIN_KEYS_PASSPHRASE}}
+    - name: Log env variables
+      run: echo SONIN_KEYS_PASSPHRASE
 
     - name: Install fastlane
       run: |
         sudo apt-get update && sudo apt-get install ruby
         sudo gem install fastlane -NV
 
+    - name: Decrypt Sonin secrets
+      run: sh ./scripts/decrypt_secret.sh
+      
     - name: Build and Release Android App
       run: fastlane android release
       working-directory: android
