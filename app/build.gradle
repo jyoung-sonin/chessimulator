@@ -14,8 +14,6 @@ android {
             storeFile file(findProperty("storeFile"))
             storePassword findProperty("storePassword")
         }
-
-        print(release)
     }
 
     defaultConfig {
