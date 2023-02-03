@@ -15,24 +15,31 @@
 
 default_platform(:android)
 
-platform :android do
-  desc "Runs all the tests"
-  lane :test do
+platform :android do 
+  desc("Run all tests")
+  lane :test do 
     gradle(task: "test")
-  end
+  end 
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
-  lane :beta do
-    gradle(task: "clean assembleRelease")
-    crashlytics
-  
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
-  end
-
-  desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
+  lane :release do 
+    desc("Sign, build and release")
+    
+    gradle(
+      task: "bundle",
+      flavor: "production",
+      build_type: "release",
+      properties: {
+        "android.signingConfigs.release.storePassword" => keystore_password,
+        "android.signingConfigs.release.keyPassword" => key_password
+      }
+    )
+    
+    upload_to_play_store(
+      skip_upload_apk: true,
+      skip_upload_metadata: true,
+      skip_upload_screenshots: true,
+      release_status: 'completed',
+      track: 'production'
+    )
   end
 end
