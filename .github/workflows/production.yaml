@@ -31,5 +31,5 @@ jobs:
       
     - name: Build and Release Android App
       run: fastlane android release
-      working-directory: android
+      working-directory: ./
 
