@@ -27,11 +27,7 @@ platform :android do
     gradle(
       task: "bundle",
       flavor: "production",
-      build_type: "release",
-      properties: {
-        "android.signingConfigs.release.storePassword" => keystore_password,
-        "android.signingConfigs.release.keyPassword" => key_password
-      }
+      build_type: "release"
     )
     
     upload_to_play_store(
