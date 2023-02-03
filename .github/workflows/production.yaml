@@ -1,0 +1,33 @@
+name: Production release
+
+on:
+  push:
+    branches:
+      - production
+
+env:
+  FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+  FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+
+    - name: Install fastlane
+      run: |
+        sudo apt-get update && sudo apt-get install ruby
+        sudo gem install fastlane -NV
+
+    - name: Build and Release Android App
+      run: fastlane android release
+      working-directory: android
+
