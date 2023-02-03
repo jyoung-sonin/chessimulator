@@ -35,7 +35,7 @@ platform :android do
       skip_upload_metadata: true,
       skip_upload_screenshots: true,
       release_status: 'completed',
-      track: 'production'
+      track: 'draft'
     )
   end
 end
