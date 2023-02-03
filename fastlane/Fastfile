@@ -22,7 +22,7 @@ platform :android do
   end 
 
   lane :release do 
-    desc("Sign, build and release")
+    desc("Sign, build and release to production")
     
     gradle(
       task: "bundle",
@@ -38,4 +38,8 @@ platform :android do
       track: 'production'
     )
   end
+
+  lane :staging do 
+    desc("Sign, build and release to staging")
+  end 
 end

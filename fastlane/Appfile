@@ -1,2 +1,3 @@
 json_key_file(".sonin/playstore_api_key.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
+service_credentials_file(".sonin/chessimulator-ff8619a9a3ff.json")
 package_name("com.muto.chessimulator") # e.g. com.krausefx.app
