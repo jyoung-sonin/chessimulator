@@ -22,6 +22,11 @@ jobs:
       with:
         java-version: 11
 
+    - name: Decrypt Sonin secrets
+      run: sh ./scripts/decrypt_secret.sh
+      env:
+        SONIN_KEYS_PASSPHRASE: ${{secrets.SONIN_KEYS_PASSPHRASE}}
+
     - name: Install fastlane
       run: |
         sudo apt-get update && sudo apt-get install ruby
