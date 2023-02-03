@@ -22,7 +22,7 @@ jobs:
         java-version: 11
 
     - name: Log env variables
-      run: echo SONIN_KEYS_PASSPHRASE
+      run: echo $SONIN_KEYS_PASSPHRASE
 
     - name: Install fastlane
       run: |
