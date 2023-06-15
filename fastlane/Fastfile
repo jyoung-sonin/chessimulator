@@ -44,7 +44,45 @@ platform :android do
     )
   end
 
-  lane :staging do 
+  lane :uat do
+    desc("Sign, build and release to uat")
+
+    gradle(
+      task: "bundle",
+      flavor: "uat",
+      build_type: "release"
+    )
+
+    upload_to_play_store(
+      skip_upload_apk: true,
+      skip_upload_metadata: true,
+      skip_upload_screenshots: true,
+      release_status: 'completed',
+      track: 'internal',
+      json_key: '.sonin/uat_playstore_api_key.json'
+    )
+  end
+
+  lane :staging do
+    desc("Sign, build and release to staging")
+
+    gradle(
+      task: "bundle",
+      flavor: "staging",
+      build_type: "release"
+    )
+    
+    upload_to_play_store(
+      skip_upload_apk: true,
+      skip_upload_metadata: true,
+      skip_upload_screenshots: true,
+      release_status: 'completed',
+      track: 'internal',
+      json_key: '.sonin/staging_playstore_api_key.json'
+    )
+  end
+
+  lane :staging-firebase do 
     desc("Sign, build and release to staging")
     
     gradle(
