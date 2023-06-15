@@ -1,6 +1,14 @@
 name: Production release
 
 on:
+  workflow_dispatch:
+    inputs:
+      enable:
+        description: 'Enable workflow'
+        required: true
+        default: 'false'
+
+on:
   push:
     branches:
       - production
