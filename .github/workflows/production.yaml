@@ -35,5 +35,5 @@ jobs:
       run: sh ./scripts/decrypt_secret.sh
       
     - name: Build and Release Android App
-      run: fastlane android release
+      run: fastlane android production
       working-directory: ./
