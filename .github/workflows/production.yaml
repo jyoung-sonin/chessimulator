@@ -24,6 +24,7 @@ jobs:
     - name: Install fastlane
       run: |
         sudo apt-get update && sudo apt-get install ruby
+        sudo gem install bundler -NV
         sudo gem install fastlane -NV
         sudo bundle exec fastlane update_plugins
 
