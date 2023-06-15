@@ -21,12 +21,15 @@ jobs:
       with:
         java-version: 11
 
-    - name: Install fastlane
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '2.7'
+
+    - name: Install Bundler and Fastlane
       run: |
-        sudo apt-get update && sudo apt-get install ruby
-        sudo gem install bundler -NV
-        sudo gem install fastlane -NV
-        sudo bundle exec fastlane update_plugins
+        gem install bundler
+        bundle install
 
     - name: Decrypt Sonin secrets
       run: sh ./scripts/decrypt_secret.sh
@@ -34,4 +37,3 @@ jobs:
     - name: Build and Release Android App
       run: fastlane android release
       working-directory: ./
-
