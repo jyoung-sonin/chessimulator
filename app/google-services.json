@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "162819568560",
+    "project_id": "chessimulator",
+    "storage_bucket": "chessimulator.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:162819568560:android:42b2b5e9f6a7e610865c75",
+        "android_client_info": {
+          "package_name": "com.muto.chessimulator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "162819568560-8shpab2eg10i11nrdmr7f4cg5bshmvtb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmxQ0BRcRjPPj4aV9npv-1iTTTiq17yds"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "162819568560-8shpab2eg10i11nrdmr7f4cg5bshmvtb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
