@@ -25,6 +25,7 @@ jobs:
       run: |
         sudo apt-get update && sudo apt-get install ruby
         sudo gem install fastlane -NV
+        sudo fastlane update_plugins
 
     - name: Decrypt Sonin secrets
       run: sh ./scripts/decrypt_secret.sh
