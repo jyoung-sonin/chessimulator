@@ -1,0 +1,36 @@
+name: Staging release
+
+on:
+  push:
+    branches:
+      - staging
+
+env:
+  SONIN_KEYS_PASSPHRASE: ${{ secrets.SONIN_KEYS_PASSPHRASE }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+
+    - name: Install fastlane
+      run: |
+        sudo apt-get update && sudo apt-get install ruby
+        sudo gem install fastlane -NV
+
+    - name: Decrypt Sonin secrets
+      run: sh ./scripts/decrypt_secret.sh
+      
+    - name: Build and Release Android App
+      run: fastlane android staging
+      working-directory: ./
+
+

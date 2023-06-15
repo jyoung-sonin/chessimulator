@@ -4,6 +4,8 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+apply from: '../versioning.gradle'
+
 android {
     namespace 'com.muto.chessimulator'
     compileSdk 33
@@ -21,8 +23,8 @@ android {
         applicationId "com.muto.chessimulator"
         minSdk 28
         targetSdk 33
-        versionCode 4
-        versionName "1.0.3"
+        versionCode buildVersionCode()
+        versionName buildVersionName()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

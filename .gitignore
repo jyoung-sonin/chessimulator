@@ -8,3 +8,4 @@ app/production/
 
 fastlane/report.xml
 app/google-services.json
+secret.tar.gz
