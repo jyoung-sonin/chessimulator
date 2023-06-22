@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -18,19 +19,28 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import kotlin.math.floor
 
 private const val CELL_COUNT = 8
 
+data class Coordinate(val x: Int, val y: Int)
+
+data class Tile(val coordinate: Coordinate, val color: Color)
+
+typealias Board = List<List<Tile>>
+
 @Composable
 fun GameUi() {
-    val board = remember { mutableStateOf(Array(CELL_COUNT) { BooleanArray(CELL_COUNT) }) }
+    val board = remember { mutableStateOf(generateEmptyBoard()) }
+    val selectedTileCoordinate = remember { mutableStateOf(Coordinate(-1, -1)) }
 
-    board.value[1][1] = true
+    val screenWidth = LocalConfiguration.current.screenWidthDp
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .background(Color.Gray),
         verticalArrangement = Arrangement.Center
     ) {
@@ -39,15 +49,28 @@ fun GameUi() {
                 .aspectRatio(1f)
                 .background(Color.Black)
                 .pointerInput(Unit) {
-                    detectTapGestures(onTap = {
-                        Log.d(
-                            "PointerInput",
-                            "offset=$it cellX=${floor(it.x % CELL_COUNT).toInt()} cellY=${floor(it.y % CELL_COUNT).toInt()}"
-                        )
+                    detectTapGestures(
+                        onTap = { offset ->
+                            Log.d(
+                                "PointerInput",
+                                "offset=$offset cellX=${floor(offset.x % CELL_COUNT).toInt()} cellY=${
+                                    floor(
+                                        offset.y % CELL_COUNT
+                                    ).toInt()
+                                }"
+                            )
 
-                        board.value[floor(it.y % CELL_COUNT).toInt()][floor(it.x % CELL_COUNT).toInt()] =
-                            true
-                    })
+                            val boardWidthPx = screenWidth * density
+                            val cellWidth = boardWidthPx / CELL_COUNT
+
+                            val xCell = (offset.x / cellWidth).toInt()
+                            val yCell = (offset.y / cellWidth).toInt()
+
+                            selectedTileCoordinate.value = Coordinate(xCell, yCell)
+
+                            board.value = getBoardWithSelectedTile(board.value, selectedTileCoordinate.value)
+                        }
+                    )
                 }
         ) {
             chessBoard(board.value)
@@ -55,27 +78,50 @@ fun GameUi() {
     }
 }
 
-private fun DrawScope.chessBoard(board: Array<BooleanArray>) {
+private fun getBoardWithSelectedTile(
+    board: Board,
+    selectedTileCoordinate: Coordinate
+): Board {
+    return board.map { xTiles ->
+        xTiles.map { tile ->
+            if (tile.coordinate == selectedTileCoordinate) {
+                Tile(tile.coordinate, Color.Red)
+            } else {
+                generateEmptyBoard()[tile.coordinate.y][tile.coordinate.x]
+            }
+        }
+    }
+}
+
+private fun generateEmptyBoard(): Board {
+    return List(CELL_COUNT) { y ->
+        List(CELL_COUNT) { x ->
+            val tileColor = if (y % 2 == 0) {
+                if (x % 2 == 0) Color.White else Color.Black
+            } else {
+                if (x % 2 != 0) Color.White else Color.Black
+            }
+
+            Tile(Coordinate(x, y), tileColor)
+        }
+    }
+}
+
+private fun DrawScope.chessBoard(board: List<List<Tile>>) {
     val width = size.width
     val cellSize = width / CELL_COUNT
 
-    for (i in 0 until CELL_COUNT) {
-        val y = cellSize * i
+    for (xTiles in board) {
+        val y = xTiles.first().coordinate.y * cellSize
         var x: Float
 
-        for (j in 0 until CELL_COUNT) {
-            x = cellSize * j
+        for (tile in xTiles) {
+            x = tile.coordinate.x * cellSize
 
             val rect = Rect(Offset(x, y), Size(cellSize, cellSize))
 
             drawRect(
-                color = when (board[i][j]) {
-                    true -> Color.Red
-                    false -> when ((i + j) % 2 == 0) {
-                        true -> Color.White
-                        false -> Color.Black
-                    }
-                },
+                color = tile.color,
                 size = rect.size,
                 topLeft = rect.topLeft
             )
