@@ -82,12 +82,15 @@ private fun getBoardWithSelectedTile(
     board: Board,
     selectedTileCoordinate: Coordinate
 ): Board {
+    val emptyBoard = generateEmptyBoard()
     return board.map { xTiles ->
         xTiles.map { tile ->
-            if (tile.coordinate == selectedTileCoordinate) {
+            if (tile.coordinate == selectedTileCoordinate && tile.color == Color.Red) {
+                Tile(tile.coordinate, emptyBoard[tile.coordinate.y][tile.coordinate.x].color)
+            } else if (tile.coordinate == selectedTileCoordinate) {
                 Tile(tile.coordinate, Color.Red)
             } else {
-                generateEmptyBoard()[tile.coordinate.y][tile.coordinate.x]
+                emptyBoard[tile.coordinate.y][tile.coordinate.x]
             }
         }
     }
